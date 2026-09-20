@@ -1,141 +1,161 @@
 # Community Equipment & Resource Borrowing System
 
-CSE 499 Senior Project — a small web application that helps communities and organizations list shared equipment, request items, approve loans, and track returns.
+A small MVC-style Node.js + Express + MongoDB web application for a community, school, church, student organization, or similar group to list shared equipment, submit borrowing requests, approve/reject requests, and track returns.
 
-This is a small platform where members of a community, organization, school, or church can list equipment they own and allow other members to request to borrow it. Organizations often have useful equipment that is difficult to locate or track. This system would provide a centralized inventory and borrowing system.
+This implementation covers **Sprint 1 and Sprint 2** from the supplied CSE 499 project plan. The project plan defines the MVP workflow as **Register/Login → Browse Equipment → Submit Request → Approve/Reject → Borrow → Return** and specifies Node.js, Express.js, MongoDB, Mongoose, HTML5, CSS3, JavaScript, JWT, bcryptjs, Git/GitHub, and VS Code.
 
-## Team
+## Features
 
-| Member | Role
+### Sprint 1
 
-1. Joseph Anucha | Developer/Project Lead
-2. Sophia Akwero | Developer
-3. Emmanuel Owilli | Developer
+- User registration and login.
+- JWT authentication.
+- Member and administrator roles.
+- Equipment listing with category, description, location, condition, and status.
+- Search and filtering.
+- Admin equipment CRUD.
+- Responsive homepage, login page, and dashboard.
+- Demo seed data.
 
-## Project Links
+### Sprint 2
 
-- **GitHub Repository:** [Repository URL]
-- **Trello / Project Board:** [Board URL]
-- **Live Application:** [Deployed URL when available]
-- **Project Proposal:** [Proposal link when available]
+- BorrowRequest model.
+- Member borrowing requests with dates and purpose.
+- Date validation.
+- Conflict prevention for overlapping Pending/Approved requests.
+- Member request history.
+- Administrator request review.
+- Approve/reject workflow.
+- Approved equipment changes to `Borrowed`.
+- Return workflow changes request to `Returned` and equipment to `Available`.
+- Member/admin authorization.
 
-## Purpose
+## Project Structure
 
-Organizations, churches, schools, clubs, and communities often own equipment that is shared among members, but they may not have a simple way to know what is available, who has borrowed an item, or when an item is expected back. This project provides a centralized system for listing equipment and managing the borrowing workflow.
+## Requirements
 
-## MVP Scope
+- Node.js 18+ (Node.js 20+ recommended).
+- MongoDB local installation or a MongoDB Atlas connection.
+- A terminal and VS Code or another editor.
 
-The three-sprint MVP focuses on four complete workflows:
+## Setup
 
-1. **Accounts** — register, log in, and log out.
-2. **Equipment** — create, view, search/filter, and edit equipment listings.
-3. **Borrowing** — submit a request with dates and purpose.
-4. **Approval & Return** — an owner/admin approves or rejects a request; an approved loan can be marked returned and the equipment becomes available again.
+### 1. Install dependencies
 
-### Core Requirements
+```bash
+npm install
+```
 
-- Member and admin roles
-- Equipment categories and availability status
-- Equipment search/filter
-- Borrow requests
-- Owner/admin approval and rejection
-- Loan/return tracking
-- Member request dashboard
-- Admin dashboard with basic counts
+### 2. Configure environment variables
 
-### Post-MVP Enhancements
+Then update `MONGODB_URI` and `JWT_SECRET`.
 
-Only to be added after all core requirements are working:
+For a local MongoDB server:
 
-- Email notifications
-- QR codes for equipment
-- Overdue reminders
-- Equipment condition/history
-- Reports and export
+```text
+MONGODB_URI=mongodb://127.0.0.1:27017/community_equipment_borrowing
+```
 
-## Technology
+For MongoDB Atlas, paste Atlas connection string.
 
-- Node.JS
-- Express
-- MongoDB
-- HTML/CSS/JavaScript
-- GitHub for source control
+```text
+Administrator
+Email: admin@communityequip.local
+Password: Admin123!
 
-## Running the Project
+Member
+Email: member@communityequip.local
+Password: Member123!
+```
 
-## --
+These are development/demo credentials only. Change them before any real deployment.
 
---
+### 4. Start the server
 
-### Demo Accounts
+Development mode:
 
-- Admin: `admin@example.com` / `Admin123!`
-- Member: `member@example.com` / `Member123!`
+```bash
+npm run dev
+```
 
-Change or remove these demo credentials before any public deployment.
+Normal mode:
 
-## Three-Sprint Plan
+```bash
+npm start
+```
 
-### Sprint 1 — Foundation & Equipment
+Open:
 
-**Goal:** A working application with authentication and equipment management.
+```text
+http://localhost:3000
+```
 
-- Create Node.js MVC project
-- Configure and install Express
-- Create database models and connect MongoDB
-- Implement registration/login/logout
-- Implement member/admin roles
-- Create equipment CRUD
-- Add search/filter
-- Seed demo data
-- Push working code to GitHub
+Health check:
 
-**Sprint 1 Definition of Done:** A user can register/login, browse equipment, search equipment, and add/edit an equipment listing.
+```text
+http://localhost:3000/api/health
+```
 
-### Sprint 2 — Borrowing Workflow
+## API
 
-**Goal:** Complete the main borrowing process.
+### Authentication
 
-- Create borrow request form
-- Validate requested dates
-- Show user request dashboard
-- Show owner/admin pending requests
-- Approve/reject requests
-- Change equipment to Borrowed when approved
-- Mark approved loans as Returned
-- Change equipment back to Available
-- Add authorization checks
-- Test the complete request workflow
+```text
+POST /api/auth/register
+POST /api/auth/login
+GET  /api/auth/me
+```
 
-**Sprint 2 Definition of Done:** A member can request available equipment, an owner/admin can approve or reject it, and an approved loan can be returned.
+### Equipment
 
-### Sprint 3 — Quality, UX & Final Demonstration
+```text
+GET    /api/equipment
+GET    /api/equipment/:id
+POST   /api/equipment       # admin + JWT
+PUT    /api/equipment/:id   # admin + JWT
+DELETE /api/equipment/:id   # admin + JWT
+```
 
-**Goal:** Make the MVP stable, understandable, and presentation-ready.
+Search/filter example:
 
-- Fix functional bugs
-- Improve responsive UI
-- Add validation/error messages
-- Test all core requirements
-- Review authorization/security paths
-- Clean up code and comments
-- Update README and project documentation
-- Deploy if required
-- Prepare final demonstration video
-- Verify every team member has meaningful GitHub contributions
+```text
+GET /api/equipment?search=projector&category=Audio%20Visual&status=Available
+```
 
-**Sprint 3 Definition of Done:** All core requirements work from a clean start, the application is presentable, documentation is complete, and the team can demonstrate the full workflow.
+### Borrow Requests
 
-## Main Demonstration Scenario
+```text
+GET   /api/borrow-requests
+POST  /api/borrow-requests
+PATCH /api/borrow-requests/:id/review
+PATCH /api/borrow-requests/:id/return
+```
 
-The final demonstration should show this sequence:
+All borrowing endpoints require a valid JWT. Review requires an administrator. A member can return an approved request that belongs to them; an administrator can process returns as well.
 
-**Register/Login → Browse Equipment → View Details → Submit Borrow Request → Owner/Admin Approves → Equipment Becomes Borrowed → Borrower Returns Equipment → Equipment Becomes Available Again.**
+## End-to-End Demo
 
-## Scope Rule
+1. Open the home page.
+2. Log in as the demo member.
+3. Search for an available item.
+4. Click **Request Loan**.
+5. Select start/end dates and enter a purpose.
+6. Submit the request.
+7. Log out.
+8. Log in as the demo administrator.
+9. Open the pending request and approve it.
+10. Confirm the equipment status becomes **Borrowed**.
+11. Log out and sign in as the member again.
+12. Use **Mark Returned** on the approved request.
+13. Confirm the request becomes **Returned** and the equipment becomes **Available**.
 
-The team should not add major features until the four MVP workflows are complete. Enhancements are optional and should never put the core requirements at risk.
+## Authorization Notes
 
-## License
+- New registrations are always created as `member` accounts.
+- The seed script creates the administrator account.
+- The admin role is required for equipment CRUD and request approval/rejection.
+- JWTs are stored in browser local storage for this classroom/demo MVP. For a production application, consider secure HTTP-only cookies, CSRF protection, rate limiting, email verification, password reset, and more robust audit logging.
 
-For CSE 499 academic project use. Add the team's preferred license if the project will be published publicly.
+## Sprint 3 Not Included Yet
+
+The supplied plan reserves Sprint 3 for testing, polish, demonstration preparation, documentation refinement, and optional deployment. This package does not claim those tasks are complete. Optional features such as email notifications, overdue alerts, QR codes, analytics, and reports are also not included.

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Share Equip | Dashboard</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/"><span class="brand-mark">SE</span><span>SHARE<br>EQUIP</span></a>
+    <nav class="desktop-nav" aria-label="Dashboard navigation">
+      <a href="/">Home</a><a href="#catalog">Catalog</a><a href="#requests">My Loans</a><a href="#adminPanel">Admin</a>
+    </nav>
+    <div class="header-user"><span id="userBadge">Loading…</span><button id="logoutBtn" class="link-button">Logout</button></div>
+  </header>
+
+  <main class="container dashboard">
+    <section class="dashboard-hero">
+      <div><p class="eyebrow">YOUR SHARE EQUIP WORKSPACE</p><h1 id="welcomeTitle">Dashboard</h1><p>Browse resources, request equipment, and track borrowing activity.</p></div>
+      <button id="addEquipmentBtn" class="btn btn-accent hidden">+ Add New Item</button>
+    </section>
+
+    <div id="dashboardMessage" class="alert hidden"></div>
+
+    <section id="catalog" class="panel">
+      <div class="section-heading compact">
+        <div><p class="eyebrow">DIRECTORY</p><h2>Equipment Catalog</h2></div>
+        <span id="catalogCount" class="count-pill"></span>
+      </div>
+      <div class="filter-row">
+        <input id="catalogSearch" type="search" placeholder="Search projector, ladder, PA system…">
+        <select id="categoryFilter"><option value="All">All categories</option></select>
+        <select id="statusFilter"><option value="All">All status</option><option>Available</option><option>Borrowed</option><option>Maintenance</option></select>
+        <button id="filterBtn" class="btn btn-dark">Search</button>
+      </div>
+      <div id="catalogGrid" class="equipment-grid"></div>
+    </section>
+
+    <section id="requests" class="panel">
+      <div class="section-heading compact"><div><p class="eyebrow">BORROWING WORKFLOW</p><h2 id="requestHeading">My Requests</h2></div></div>
+      <div id="requestsList" class="request-list"></div>
+    </section>
+
+    <section id="adminPanel" class="panel hidden">
+      <div class="section-heading compact"><div><p class="eyebrow">ADMINISTRATION</p><h2>Pending Requests</h2></div></div>
+      <div id="adminRequests" class="request-list"></div>
+    </section>
+  </main>
+
+  <div id="requestModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="requestTitle">
+    <div class="modal-card">
+      <button class="modal-close" data-close="requestModal">×</button>
+      <p class="eyebrow">BORROW REQUEST</p><h2 id="requestTitle">Request Equipment</h2>
+      <p id="requestEquipmentName" class="muted"></p>
+      <form id="requestForm" class="stack-form">
+        <input type="hidden" name="equipment">
+        <label>Start date<input type="date" name="startDate" required></label>
+        <label>End date<input type="date" name="endDate" required></label>
+        <label>Purpose<textarea name="purpose" rows="4" required maxlength="500" placeholder="Tell us how you will use the equipment."></textarea></label>
+        <button class="btn btn-accent btn-full" type="submit">Submit Request</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="equipmentModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="equipmentTitle">
+    <div class="modal-card wide">
+      <button class="modal-close" data-close="equipmentModal">×</button>
+      <p class="eyebrow">ADMIN • EQUIPMENT</p><h2 id="equipmentTitle">Add Equipment</h2>
+      <form id="equipmentForm" class="form-grid">
+        <label>Name<input name="name" required maxlength="100" placeholder="Projector"></label>
+        <label>Category<input name="category" required maxlength="60" placeholder="Audio Visual"></label>
+        <label>Location<input name="location" required maxlength="120" placeholder="Main Resource Room"></label>
+        <label>Condition<select name="condition"><option>Excellent</option><option selected>Good</option><option>Fair</option><option>Needs Repair</option></select></label>
+        <label class="full-span">Description<textarea name="description" rows="4" required maxlength="1000"></textarea></label>
+        <div class="full-span form-actions"><button class="btn btn-outline" type="button" data-close="equipmentModal">Cancel</button><button class="btn btn-accent" type="submit">Save Equipment</button></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', () => window.ShareEquip.initDashboard());</script>
+</body>
+</html>

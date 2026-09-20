@@ -1,24 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Community Equipment</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Share Equip | Community Equipment Lending</title>
+  <meta name="description" content="Browse and borrow shared community equipment.">
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
-
 <body>
-    <div class="container">
-        <h1>Community Equipment & Resource Borrowing System</h1>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Share Equip home"><span class="brand-mark">SE</span><span>SHARE<br>EQUIP</span></a>
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <a href="/">Home</a>
+      <a href="#equipment">Catalog</a>
+      <a href="/dashboard.html">My Loans</a>
+      <a href="/dashboard.html">Admin</a>
+      <a href="/login.html">User Profile</a>
+    </nav>
+    <a class="mobile-menu" href="/dashboard.html">Menu ☰</a>
+  </header>
 
-        <p>
-            Welcome to the Community Equipment Borrowing System.
-        </p>
-
-        <div>
-            <a href="register.html">Create Account</a>
-            <a href="login.html">Login</a>
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <p class="eyebrow">SHARED RESOURCES • SIMPLE BORROWING</p>
+        <h1>Community Equipment Lending</h1>
+        <p class="hero-copy">Find equipment, submit a request, and keep shared resources moving through the community.</p>
+        <div class="search-row">
+          <label class="sr-only" for="homeSearch">Search equipment</label>
+          <input id="homeSearch" type="search" placeholder="Search for items (e.g., projector, ladder)...">
+          <button id="homeSearchBtn" class="btn btn-dark">Search</button>
+          <a class="btn btn-accent" href="/dashboard.html">Add New Item</a>
         </div>
+      </div>
+    </section>
+
+    <section id="equipment" class="section container">
+      <div class="section-heading">
+        <div><p class="eyebrow">AVAILABLE NOW</p><h2>Featured Equipment</h2></div>
+        <span id="homeCount" class="count-pill">Loading…</span>
+      </div>
+      <div id="homeEquipment" class="equipment-grid"></div>
+      <div class="center"><a class="btn btn-outline" href="/dashboard.html">Browse All Categories</a></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© 2026 Share Equip</span>
+      <div><a href="#">About</a><a href="#">Contact</a><a href="#">Terms</a><a href="#">Community Guidelines</a></div>
     </div>
+  </footer>
+  <script src="/js/app.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', () => window.ShareEquip.loadHome());</script>
 </body>
 </html>

@@ -1,28 +1,27 @@
 {
-  "name": "community-equipment",
+  "name": "community-equipment-borrowing",
   "version": "1.0.0",
-  "description": "This is a small platform where members of a community, organization, school, or church can list equipment they own and allow other members to request to borrow it. Organizations often have useful equipment that is difficult to locate or track. This system would provide a centralized inventory and borrowing system.",
-  "main": "index.js",
+  "description": "Community Equipment & Resource Borrowing System - CSE 499 MVC MVP",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node scripts/seed.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/akwero-sophia/Community-Equipment.git"
+  "keywords": ["nodejs", "express", "mongodb", "mongoose", "jwt", "mvc"],
+  "author": "Joseph, Sophia, and Emmanuel",
+  "license": "BYU Pathway",
+  "engines": {
+    "node": ">=18"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/akwero-sophia/Community-Equipment/issues"
-  },
-  "homepage": "https://github.com/akwero-sophia/Community-Equipment#readme",
   "dependencies": {
-    "bcryptjs": "^3.0.3",
-    "dotenv": "^18.0.1",
-    "express": "^5.2.1",
-    "express-session": "^1.19.0",
-    "mongoose": "^9.10.1"
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.0",
+    "morgan": "^1.10.0"
   }
 }
