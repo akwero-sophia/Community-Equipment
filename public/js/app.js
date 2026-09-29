@@ -312,26 +312,46 @@
   }
 
   function bindRequestActions(root) {
-    $$('.review-btn', root).forEach((button) => button.addEventListener('click', async () => {
-      try {
-        await api(`/api/borrow-requests/${button.dataset.id}/review`, { method: 'PATCH', body: { decision: button.dataset.decision } });
-        showAlert($('#dashboardMessage'), `Request ${button.dataset.decision}d successfully.`);
-        await loadRequests();
-        await loadAdminRequests();
-        await refreshCatalog();
-      } catch (error) { showAlert($('#dashboardMessage'), error.message, 'error'); }
-    }));
-    $$('.return-btn', root).forEach((button) => button.addEventListener('click', async () => {
-      try {
-        await api(`/api/borrow-requests/${button.dataset.id}/return`, { method: 'PATCH' });
-        showAlert($('#dashboardMessage'), 'Equipment returned and marked Available.');
-        await loadRequests();
-        if (user()?.role === 'admin') await loadAdminRequests();
-        await refreshCatalog();
-      } catch (error) { showAlert($('#dashboardMessage'), error.message, 'error'); }
-    }));
-  }
+  // Approve / Reject buttons
+  $$('.review-btn', root).forEach((button) => button.addEventListener('click', async () => {
+    const decision = button.dataset.decision;
+    const actionText = decision === 'approve' ? 'approve' : 'reject';
 
+    const confirmed = confirm(`Are you sure you want to ${actionText} this borrowing request?`);
+    if (!confirmed) return;
+
+    try {
+      await api(`/api/borrow-requests/${button.dataset.id}/review`, {
+        method: 'PATCH',
+        body: { decision }
+      });
+      showAlert($('#dashboardMessage'), `Request ${decision}d successfully.`);
+      await loadRequests();
+      await loadAdminRequests();
+      await refreshCatalog();
+    } catch (error) {
+      showAlert($('#dashboardMessage'), error.message, 'error');
+    }
+  }));
+
+  // Return button
+  $$('.return-btn', root).forEach((button) => button.addEventListener('click', async () => {
+    const confirmed = confirm('Are you sure you want to mark this equipment as returned?');
+    if (!confirmed) return;
+
+    try {
+      await api(`/api/borrow-requests/${button.dataset.id}/return`, {
+        method: 'PATCH'
+      });
+      showAlert($('#dashboardMessage'), 'Equipment returned and marked Available.');
+      await loadRequests();
+      if (user()?.role === 'admin') await loadAdminRequests();
+      await refreshCatalog();
+    } catch (error) {
+      showAlert($('#dashboardMessage'), error.message, 'error');
+    }
+  }));
+}
   window.ShareEquip = { loadHome, initDashboard };
   if (document.querySelector('#loginForm')) setupLogin();
 })();
