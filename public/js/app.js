@@ -277,31 +277,58 @@
     } catch (error) { showAlert($('#dashboardMessage'), error.message, 'error'); }
   }
 
-  function requestCard(request, admin = false) {
-    const equipmentName = request.equipment?.name || 'Equipment';
-    const requesterName = request.requester?.name || 'Member';
-    let actions = '';
-    if (admin && request.status === 'Pending') {
-      actions = `<button class="btn btn-accent review-btn" data-id="${request._id}" data-decision="approve">Approve</button><button class="btn btn-outline review-btn" data-id="${request._id}" data-decision="reject">Reject</button>`;
-    } else if (request.status === 'Approved') {
-      actions = `<button class="btn btn-dark return-btn" data-id="${request._id}">Mark Returned</button>`;
-    }
-    return `<article class="request-card">
-      <div><h3>${escapeHtml(equipmentName)}</h3><p>${admin ? `Requested by ${escapeHtml(requesterName)} • ` : ''}${escapeHtml(request.purpose)}</p></div>
-      <div><p><strong>Start</strong> ${formatDate(request.startDate)}</p><p><strong>End</strong> ${formatDate(request.endDate)}</p></div>
-      <div><span class="request-status ${request.status.toLowerCase()}">${escapeHtml(request.status)}</span><p>${request.reviewedAt ? `Reviewed ${formatDate(request.reviewedAt)}` : 'Awaiting review'}</p></div>
-      <div class="request-actions">${actions}</div>
-    </article>`;
+function requestCard(request, admin = false) {
+  const equipmentName = request.equipment?.name || 'Equipment';
+  const requesterName = request.requester?.name || 'Member';
+  const reviewerName = request.reviewedBy?.name || null;
+
+  let actions = '';
+  if (admin && request.status === 'Pending') {
+    actions = `
+      <button class="btn btn-accent review-btn" data-id="${request._id}" data-decision="approve">Approve</button>
+      <button class="btn btn-outline review-btn" data-id="${request._id}" data-decision="reject">Reject</button>`;
+  } else if (request.status === 'Approved') {
+    actions = `<button class="btn btn-dark return-btn" data-id="${request._id}">Mark Returned</button>`;
   }
 
+  const reviewedText = request.reviewedAt
+    ? `Reviewed ${formatDate(request.reviewedAt)}${reviewerName ? ` by ${escapeHtml(reviewerName)}` : ''}`
+    : 'Awaiting review';
+
+  return `<article class="request-card">
+    <div>
+      <h3>${escapeHtml(equipmentName)}</h3>
+      <p>${admin ? `Requested by ${escapeHtml(requesterName)} • ` : ''}${escapeHtml(request.purpose)}</p>
+    </div>
+    <div>
+      <p><strong>Start</strong> ${formatDate(request.startDate)}</p>
+      <p><strong>End</strong> ${formatDate(request.endDate)}</p>
+    </div>
+    <div>
+      <span class="request-status ${request.status.toLowerCase()}">${escapeHtml(request.status)}</span>
+      <p>${reviewedText}</p>
+    </div>
+    <div class="request-actions">${actions}</div>
+  </article>`;
+}
   async function loadRequests() {
-    try {
-      const data = await api('/api/borrow-requests');
-      $('#requestsList').innerHTML = data.requests.length ? data.requests.map((request) => requestCard(request, user()?.role === 'admin')).join('') : '<div class="empty-state">No borrowing requests yet.</div>';
-      bindRequestActions($('#requestsList'));
-    } catch (error) { $('#requestsList').innerHTML = `<div class="empty-state">${escapeHtml(error.message)}</div>`; }
-  }
+  try {
+    const data = await api('/api/borrow-requests');
+    
+    // Hide Returned requests from the main list (keeps the page clean)
+    const activeRequests = data.requests.filter(
+      (request) => request.status !== 'Returned'
+    );
 
+    $('#requestsList').innerHTML = activeRequests.length
+      ? activeRequests.map((request) => requestCard(request, user()?.role === 'admin')).join('')
+      : '<div class="empty-state">No active borrowing requests.</div>';
+
+    bindRequestActions($('#requestsList'));
+  } catch (error) {
+    $('#requestsList').innerHTML = `<div class="empty-state">${escapeHtml(error.message)}</div>`;
+  }
+}
   async function loadAdminRequests() {
     try {
       const data = await api('/api/borrow-requests');
@@ -311,46 +338,68 @@
     } catch (error) { $('#adminRequests').innerHTML = `<div class="empty-state">${escapeHtml(error.message)}</div>`; }
   }
 
-  function bindRequestActions(root) {
-  // Approve / Reject buttons
-  $$('.review-btn', root).forEach((button) => button.addEventListener('click', async () => {
-    const decision = button.dataset.decision;
-    const actionText = decision === 'approve' ? 'approve' : 'reject';
+ function bindRequestActions(root) {
+  // Approve / Reject
+  $$('.review-btn', root).forEach((button) => {
+    button.addEventListener('click', async () => {
+      const decision = button.dataset.decision;
+      const actionText = decision === 'approve' ? 'approve' : 'reject';
 
-    const confirmed = confirm(`Are you sure you want to ${actionText} this borrowing request?`);
-    if (!confirmed) return;
+      const confirmed = confirm(`Are you sure you want to ${actionText} this borrowing request?`);
+      if (!confirmed) return;
 
-    try {
-      await api(`/api/borrow-requests/${button.dataset.id}/review`, {
-        method: 'PATCH',
-        body: { decision }
+      // Disable all review buttons on this card to prevent double-clicks
+      const card = button.closest('.request-card');
+      const buttons = card ? $$('.review-btn, .return-btn', card) : [button];
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        btn.textContent = 'Processing…';
       });
-      showAlert($('#dashboardMessage'), `Request ${decision}d successfully.`);
-      await loadRequests();
-      await loadAdminRequests();
-      await refreshCatalog();
-    } catch (error) {
-      showAlert($('#dashboardMessage'), error.message, 'error');
-    }
-  }));
+
+      try {
+        await api(`/api/borrow-requests/${button.dataset.id}/review`, {
+          method: 'PATCH',
+          body: { decision }
+        });
+        showAlert($('#dashboardMessage'), `Request ${decision}d successfully.`);
+        await loadRequests();
+        await loadAdminRequests();
+        await refreshCatalog();
+      } catch (error) {
+        showAlert($('#dashboardMessage'), error.message, 'error');
+        // Re-enable buttons if it failed
+        buttons.forEach(btn => {
+          btn.disabled = false;
+          btn.textContent = btn.dataset.decision === 'approve' ? 'Approve' : 'Reject';
+        });
+      }
+    });
+  });
 
   // Return button
-  $$('.return-btn', root).forEach((button) => button.addEventListener('click', async () => {
-    const confirmed = confirm('Are you sure you want to mark this equipment as returned?');
-    if (!confirmed) return;
+  $$('.return-btn', root).forEach((button) => {
+    button.addEventListener('click', async () => {
+      const confirmed = confirm('Are you sure you want to mark this equipment as returned?');
+      if (!confirmed) return;
 
-    try {
-      await api(`/api/borrow-requests/${button.dataset.id}/return`, {
-        method: 'PATCH'
-      });
-      showAlert($('#dashboardMessage'), 'Equipment returned and marked Available.');
-      await loadRequests();
-      if (user()?.role === 'admin') await loadAdminRequests();
-      await refreshCatalog();
-    } catch (error) {
-      showAlert($('#dashboardMessage'), error.message, 'error');
-    }
-  }));
+      button.disabled = true;
+      button.textContent = 'Processing…';
+
+      try {
+        await api(`/api/borrow-requests/${button.dataset.id}/return`, {
+          method: 'PATCH'
+        });
+        showAlert($('#dashboardMessage'), 'Equipment returned and marked Available.');
+        await loadRequests();
+        if (user()?.role === 'admin') await loadAdminRequests();
+        await refreshCatalog();
+      } catch (error) {
+        showAlert($('#dashboardMessage'), error.message, 'error');
+        button.disabled = false;
+        button.textContent = 'Mark Returned';
+      }
+    });
+  });
 }
   window.ShareEquip = { loadHome, initDashboard };
   if (document.querySelector('#loginForm')) setupLogin();
