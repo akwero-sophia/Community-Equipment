@@ -4,7 +4,7 @@ const equipmentSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, 'Equipment name is required'],
+      required: [true, 'Equipmen name is required'],
       trim: true,
       maxlength: 100
     },
