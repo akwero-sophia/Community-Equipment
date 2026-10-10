@@ -156,10 +156,28 @@ All borrowing endpoints require a valid JWT. Review requires an administrator. A
 - The admin role is required for equipment CRUD and request approval/rejection.
 - JWTs are stored in browser local storage for this classroom/demo MVP. For a production application, consider secure HTTP-only cookies, CSRF protection, rate limiting, email verification, password reset, and more robust audit logging.
 
-## Sprint 3 Not Included Yet
+## Sprint 3 - Testing, Polish & Demonstration
 
-The supplied plan reserves Sprint 3 for testing, polish, demonstration preparation, documentation refinement, and optional deployment. This package does not claim those tasks are complete. Optional features such as email notifications, overdue alerts, QR codes, analytics, and reports are also not included.
+**Goal:** Make the MVP reliable and ready to demonstrate.
 
+Tasks:
+
+- Test registration/login.
+- Test authorization.
+- Test equipment CRUD.
+- Test search/filter.
+- Test borrowing requests.
+- Test approval/rejection.
+- Test returns.
+- Test invalid input/error handling.
+- Fix defects.
+- Improve responsive design and feedback.
+- Clean up code.
+- Complete README/API documentation.
+- Review GitHub history/contributions.
+- Prepare final demonstration/video.
+- Deploy if required.
 
 ## The Group Project is completed
-All tests are conducted successfully. 
+
+All tests are conducted successfully.
