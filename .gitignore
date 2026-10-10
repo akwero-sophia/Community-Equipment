@@ -8,6 +8,6 @@ coverage/
 .idea/
 project_plan.md 
 scripts/
-
+.env.sample
 
 

@@ -159,3 +159,7 @@ All borrowing endpoints require a valid JWT. Review requires an administrator. A
 ## Sprint 3 Not Included Yet
 
 The supplied plan reserves Sprint 3 for testing, polish, demonstration preparation, documentation refinement, and optional deployment. This package does not claim those tasks are complete. Optional features such as email notifications, overdue alerts, QR codes, analytics, and reports are also not included.
+
+
+## The Group Project is completed
+All tests are conducted successfully. 
