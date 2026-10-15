@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Defines the character encoding, responsive viewport, page title, description, and stylesheet. -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Share Equip | Community Equipment Lending</title>
@@ -8,6 +9,7 @@
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+  <!-- Displays the Share Equip logo and navigation links. -->
   <header class="site-header">
     <a class="brand" href="/" aria-label="Share Equip home"><span class="brand-mark">SE</span><span>SHARE<br>EQUIP</span></a>
     <nav class="desktop-nav" aria-label="Primary navigation">
@@ -20,12 +22,15 @@
     <a class="mobile-menu" href="/dashboard.html">Menu ☰</a>
   </header>
 
+  <!-- Introduces the equipment lending service and provides search and item management links. -->
   <main>
     <section class="hero">
       <div class="container hero-inner">
         <p class="eyebrow">SHARED RESOURCES • SIMPLE BORROWING</p>
         <h1>Community Equipment Lending</h1>
         <p class="hero-copy">Find equipment, submit a request, and keep shared resources moving through the community.</p>
+
+        <!-- Allows users to search for equipment or navigate to the dashboard to add an item. -->
         <div class="search-row">
           <label class="sr-only" for="homeSearch">Search equipment</label>
           <input id="homeSearch" type="search" placeholder="Search for items (e.g., projector, ladder)...">
@@ -35,22 +40,30 @@
       </div>
     </section>
 
+    <!-- Displays featured equipment and provides access to the full equipment catalog. -->
     <section id="equipment" class="section container">
       <div class="section-heading">
         <div><p class="eyebrow">AVAILABLE NOW</p><h2>Featured Equipment</h2></div>
         <span id="homeCount" class="count-pill">Loading…</span>
       </div>
+
+      <!-- Holds the equipment cards populated by the JavaScript application. -->
       <div id="homeEquipment" class="equipment-grid"></div>
+
+      <!-- Links users to the dashboard to browse all equipment categories. -->
       <div class="center"><a class="btn btn-outline" href="/dashboard.html">Browse All Categories</a></div>
     </section>
   </main>
 
+  <!-- Displays the copyright notice and informational footer links. -->
   <footer class="site-footer">
     <div class="container footer-inner">
       <span>© 2026 Share Equip</span>
       <div><a href="#">About</a><a href="#">Contact</a><a href="#">Terms</a><a href="#">Community Guidelines</a></div>
     </div>
   </footer>
+
+  <!-- Loads the main application JavaScript and initializes the home page after the DOM is ready. -->
   <script src="/js/app.js"></script>
   <script>document.addEventListener('DOMContentLoaded', () => window.ShareEquip.loadHome());</script>
 </body>

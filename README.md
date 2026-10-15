@@ -1,8 +1,8 @@
 # Community Equipment & Resource Borrowing System
 
-A small MVC-style Node.js + Express + MongoDB web application for a community, school, church, student organization, or similar group to list shared equipment, submit borrowing requests, approve/reject requests, and track returns.
+SHARE EQUIP - A small MVC-style Node.js + Express + MongoDB web application for a community, school, church, student organization, or similar group to list shared equipment, submit borrowing requests, approve/reject requests, and track returns.
 
-This implementation covers **Sprint 1 and Sprint 2** from the supplied CSE 499 project plan. The project plan defines the MVP workflow as **Register/Login → Browse Equipment → Submit Request → Approve/Reject → Borrow → Return** and specifies Node.js, Express.js, MongoDB, Mongoose, HTML5, CSS3, JavaScript, JWT, bcryptjs, Git/GitHub, and VS Code.
+The project plan defines the MVP workflow as **Register/Login → Browse Equipment → Submit Request → Approve/Reject → Borrow → Return** and specifies Node.js, Express.js, MongoDB, Mongoose, HTML5, CSS3, JavaScript, JWT, bcryptjs, Git/GitHub, and VS Code.
 
 ## Features
 
@@ -29,6 +29,28 @@ This implementation covers **Sprint 1 and Sprint 2** from the supplied CSE 499 p
 - Approved equipment changes to `Borrowed`.
 - Return workflow changes request to `Returned` and equipment to `Available`.
 - Member/admin authorization.
+
+## Sprint 3 - Testing, Polish & Demonstration
+
+**Goal:** Make the MVP reliable and ready to demonstrate.
+
+Tasks:
+
+- Test registration/login.
+- Test authorization.
+- Test equipment CRUD.
+- Test search/filter.
+- Test borrowing requests.
+- Test approval/rejection.
+- Test returns.
+- Test invalid input/error handling.
+- Fix defects.
+- Improve responsive design and feedback.
+- Clean up code.
+- Complete README/API documentation.
+- Review GitHub history/contributions.
+- Prepare final demonstration/video.
+- Deploy if required.
 
 ## Project Structure
 
@@ -87,13 +109,13 @@ npm start
 Open:
 
 ```text
-http://localhost:3000
+http://localhost:5000
 ```
 
 Health check:
 
 ```text
-http://localhost:3000/api/health
+http://localhost:5000/api/health
 ```
 
 ## API
@@ -155,28 +177,6 @@ All borrowing endpoints require a valid JWT. Review requires an administrator. A
 - The seed script creates the administrator account.
 - The admin role is required for equipment CRUD and request approval/rejection.
 - JWTs are stored in browser local storage for this classroom/demo MVP. For a production application, consider secure HTTP-only cookies, CSRF protection, rate limiting, email verification, password reset, and more robust audit logging.
-
-## Sprint 3 - Testing, Polish & Demonstration
-
-**Goal:** Make the MVP reliable and ready to demonstrate.
-
-Tasks:
-
-- Test registration/login.
-- Test authorization.
-- Test equipment CRUD.
-- Test search/filter.
-- Test borrowing requests.
-- Test approval/rejection.
-- Test returns.
-- Test invalid input/error handling.
-- Fix defects.
-- Improve responsive design and feedback.
-- Clean up code.
-- Complete README/API documentation.
-- Review GitHub history/contributions.
-- Prepare final demonstration/video.
-- Deploy if required.
 
 ## The Group Project is completed
 

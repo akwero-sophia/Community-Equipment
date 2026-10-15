@@ -1,21 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Defines the character encoding, responsive viewport, page title, and stylesheet. -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Share Equip | Login</title>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body class="auth-page">
+  <!-- Displays the Share Equip brand and a link back to the home page. -->
   <header class="site-header">
     <a class="brand" href="/"><span class="brand-mark">SE</span><span>SHARE<br>EQUIP</span></a>
     <a class="back-link" href="/">← Home</a>
   </header>
+
+  <!-- Contains the login and registration forms. -->
   <main class="auth-shell">
     <section class="auth-card">
+
+      <!-- Allows users to switch between login and account registration. -->
       <div class="tabs"><button class="tab active" data-auth-tab="login">Login</button><button class="tab" data-auth-tab="register">Create Account</button></div>
+
+      <!-- Displays authentication messages, errors, or status notifications. -->
       <div id="authMessage" class="alert hidden"></div>
 
+      <!-- Collects the user's email and password to sign in. -->
       <form id="loginForm" class="auth-form">
         <p class="eyebrow">WELCOME BACK</p>
         <h1>Sign in to Share Equip</h1>
@@ -25,6 +34,7 @@
         <p class="demo-note">Demo admin: <strong>admin@communityequip.local</strong> / <strong>Admin123!</strong></p>
       </form>
 
+      <!-- Collects the user's name, email, and password to create a new account. -->
       <form id="registerForm" class="auth-form hidden">
         <p class="eyebrow">JOIN THE COMMUNITY</p>
         <h1>Create your account</h1>
@@ -35,6 +45,9 @@
       </form>
     </section>
   </main>
+
+  <!-- Loads the JavaScript that handles login, registration, and authentication tab interactions. -->
   <script src="/js/app.js"></script>
 </body>
 </html>
+
